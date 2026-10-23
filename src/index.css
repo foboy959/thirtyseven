@@ -1,0 +1,33 @@
+/* Load Anton Font Globally */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  font-family: "Anton", Impact, sans-serif;
+  overflow-x: hidden;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
