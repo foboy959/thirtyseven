@@ -6,12 +6,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import InstagramIcon from '@mui/icons-material/Instagram';
+
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 
@@ -27,7 +30,7 @@ const fontFamilyStyle = {
   letterSpacing: '0.05em',
 };
 
-// Shared hover style for all navigation buttons
+// Desktop navigation styles
 const navButtonStyle = {
   ...fontFamilyStyle,
   color: '#374151',
@@ -40,7 +43,7 @@ const navButtonStyle = {
   },
 };
 
-// Shared style for mobile menu items
+// Mobile navigation styles
 const mobileMenuItemStyle = {
   ...fontFamilyStyle,
   color: '#374151',
@@ -101,11 +104,18 @@ export default function Header() {
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar variant="dense" disableGutters sx={{ py: 1 }}>
+        <Toolbar
+          variant="dense"
+          disableGutters
+          sx={{ py: 1 }}
+        >
           {/* Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Link to="/" style={{ textDecoration: 'none' }}>
-              <LogoImage src={logo} alt="Thirty Seven BJJ" />
+              <LogoImage
+                src={logo}
+                alt="Thirty Seven BJJ"
+              />
             </Link>
           </Box>
 
@@ -119,7 +129,7 @@ export default function Header() {
               flexWrap: 'wrap',
             }}
           >
-            {navItems.map((item) =>
+            {navItems.map((item) => (
               item.path ? (
                 <Button
                   key={item.label}
@@ -141,7 +151,7 @@ export default function Header() {
                   {item.label}
                 </Button>
               )
-            )}
+            ))}
           </Box>
 
           {/* Desktop Social Media Icons */}
@@ -179,16 +189,16 @@ export default function Header() {
             </SocialLink>
           </Box>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Hamburger Button */}
           <Box
             sx={{
               display: { xs: 'flex', md: 'none' },
               ml: 'auto',
-              gap: 1,
             }}
           >
             <IconButton
               aria-label="Open navigation menu"
+              aria-expanded={open}
               onClick={toggleDrawer(true)}
               sx={{
                 color: '#374151',
@@ -201,104 +211,104 @@ export default function Header() {
             >
               <MenuIcon />
             </IconButton>
+          </Box>
 
-            <Drawer
-              anchor="top"
-              open={open}
-              onClose={toggleDrawer(false)}
-              slotProps={{
-                paper: {
-                  sx: {
-                    backgroundColor: '#ffffff',
-                    borderTop: '1px solid #e5e7eb',
-                  },
-                },
+          {/* Mobile Drawer */}
+          <Drawer
+            anchor="top"
+            open={open}
+            onClose={closeDrawer}
+            PaperProps={{
+              sx: {
+                backgroundColor: '#ffffff',
+                borderTop: '1px solid #e5e7eb',
+              },
+            }}
+          >
+            <Box
+              sx={{
+                p: 2,
+                backgroundColor: '#ffffff',
               }}
             >
-              <Box sx={{ p: 2, backgroundColor: '#ffffff' }}>
-                {/* Close Button */}
-                <Box
+              {/* Close Button */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <IconButton
+                  aria-label="Close navigation menu"
+                  onClick={closeDrawer}
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
+                    color: '#374151',
+                    '&:hover': {
+                      color: '#ff4694',
+                      backgroundColor: 'transparent',
+                    },
                   }}
                 >
-                  <IconButton
-                    aria-label="Close navigation menu"
+                  <CloseRoundedIcon />
+                </IconButton>
+              </Box>
+
+              {/* Mobile Navigation */}
+              <List disablePadding>
+                {navItems.map((item) => (
+                  <ListItemButton
+                    key={item.label}
+                    component={item.path ? Link : 'button'}
+                    to={item.path}
                     onClick={closeDrawer}
                     sx={{
-                      color: '#374151',
-                      '&:hover': {
-                        color: '#ff4694',
-                        backgroundColor: 'transparent',
-                      },
+                      ...mobileMenuItemStyle,
+                      width: '100%',
+                      textAlign: 'left',
                     }}
                   >
-                    <CloseRoundedIcon />
-                  </IconButton>
-                </Box>
+                    {item.label}
+                  </ListItemButton>
+                ))}
+              </List>
 
-                {/* Mobile Navigation */}
-                {navItems.map((item) =>
-                  item.path ? (
-                    <MenuItem
-                      key={item.label}
-                      component={Link}
-                      to={item.path}
-                      onClick={closeDrawer}
-                      sx={mobileMenuItemStyle}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  ) : (
-                    <MenuItem
-                      key={item.label}
-                      onClick={closeDrawer}
-                      sx={mobileMenuItemStyle}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  )
-                )}
-
-                {/* Mobile Social Media Icons */}
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 1,
-                    mt: 2,
-                    justifyContent: 'center',
-                  }}
+              {/* Mobile Social Media Icons */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  mt: 2,
+                  justifyContent: 'center',
+                }}
+              >
+                <SocialLink
+                  href="https://www.instagram.com/37jiujitsu"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <SocialLink
-                    href="https://www.instagram.com/37jiujitsu"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <SocialButton
+                    size="large"
+                    aria-label="Follow us on Instagram"
                   >
-                    <SocialButton
-                      size="large"
-                      aria-label="Follow us on Instagram"
-                    >
-                      <InstagramIcon fontSize="large" />
-                    </SocialButton>
-                  </SocialLink>
+                    <InstagramIcon fontSize="large" />
+                  </SocialButton>
+                </SocialLink>
 
-                  <SocialLink
-                    href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <SocialLink
+                  href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <SocialButton
+                    size="large"
+                    aria-label="Like us on Facebook"
                   >
-                    <SocialButton
-                      size="large"
-                      aria-label="Like us on Facebook"
-                    >
-                      <FacebookRoundedIcon fontSize="large" />
-                    </SocialButton>
-                  </SocialLink>
-                </Box>
+                    <FacebookRoundedIcon fontSize="large" />
+                  </SocialButton>
+                </SocialLink>
               </Box>
-            </Drawer>
-          </Box>
+            </Box>
+          </Drawer>
         </Toolbar>
       </Container>
     </AppBar>
