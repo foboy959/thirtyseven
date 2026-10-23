@@ -27,7 +27,33 @@ const fontFamilyStyle = {
   letterSpacing: '0.05em',
 };
 
-const SocialButton = styled(IconButton)(({ theme }) => ({
+// Shared hover style for all navigation buttons
+const navButtonStyle = {
+  ...fontFamilyStyle,
+  color: '#374151',
+  textTransform: 'uppercase',
+  fontSize: '0.95rem',
+  transition: 'color 0.2s ease',
+  '&:hover': {
+    color: '#ff4694',
+    backgroundColor: 'transparent',
+  },
+};
+
+// Shared style for mobile menu items
+const mobileMenuItemStyle = {
+  ...fontFamilyStyle,
+  color: '#374151',
+  textTransform: 'uppercase',
+  fontSize: '0.95rem',
+  transition: 'color 0.2s ease, background-color 0.2s ease',
+  '&:hover': {
+    color: '#ff4694',
+    backgroundColor: '#f9fafb',
+  },
+};
+
+const SocialButton = styled(IconButton)(() => ({
   color: '#374151',
   transition: 'color 0.2s ease, transform 0.2s ease',
   '&:hover': {
@@ -40,11 +66,25 @@ const SocialLink = styled('a')({
   textDecoration: 'none',
 });
 
+const navItems = [
+  { label: 'About', path: '/about' },
+  { label: 'Meet the Coaches', path: '/coaches' },
+  { label: 'Services', path: '/services' },
+  { label: 'Contact', path: '/contact' },
+  { label: 'Beginners Course', path: '/beginners' },
+  { label: 'Testimonials' },
+  { label: 'FAQ' },
+];
+
 export default function Header() {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
+  };
+
+  const closeDrawer = () => {
+    setOpen(false);
   };
 
   return (
@@ -62,7 +102,7 @@ export default function Header() {
     >
       <Container maxWidth="lg">
         <Toolbar variant="dense" disableGutters sx={{ py: 1 }}>
-          {/* Logo Section */}
+          {/* Logo */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Link to="/" style={{ textDecoration: 'none' }}>
               <LogoImage src={logo} alt="Thirty Seven BJJ" />
@@ -70,125 +110,98 @@ export default function Header() {
           </Box>
 
           {/* Desktop Navigation */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 4 }}>
-            <Link to="/about" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{
-                  ...fontFamilyStyle,
-                  color: '#374151',
-                  textTransform: 'uppercase',
-                  fontSize: '0.95rem',
-                  '&:hover': { color: '#ff4694', backgroundColor: 'transparent' }
-                }}
-              >
-                About
-              </Button>
-            </Link>
-            <Link to="/coaches" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{
-                  ...fontFamilyStyle,
-                  color: '#374151',
-                  textTransform: 'uppercase',
-                  fontSize: '0.95rem',
-                  '&:hover': { color: '#ff4694', backgroundColor: 'transparent' }
-                }}
-              >
-                Meet the Coaches
-              </Button>
-            </Link>
-            <Link to="/services" style={{ textDecoration: 'none' }}>
-
-              <Button
-                variant="text"
-                size="small"
-                sx={{
-                  ...fontFamilyStyle,
-                  color: '#374151',
-                  textTransform: 'uppercase',
-                  fontSize: '0.95rem',
-                }}
-              >
-                Services
-              </Button>
-            </Link>
-            <Link to="/contact" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{
-                  ...fontFamilyStyle,
-                  color: '#374151',
-                  textTransform: 'uppercase',
-                  fontSize: '0.95rem',
-                }}
-              >
-                Contact
-              </Button>
-            </Link>
-            <Link to="/beginners" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="text"
-                size="small"
-                sx={{
-                  ...fontFamilyStyle,
-                  color: '#374151',
-                  textTransform: 'uppercase',
-                  fontSize: '0.95rem',
-                }}
-              >
-                Beginners Course
-              </Button>
-            </Link>
-              <Button
-                variant="text"
-                size="small"
-              sx={{
-                ...fontFamilyStyle,
-                color: '#374151',
-                textTransform: 'uppercase',
-                fontSize: '0.95rem',
-              }}
-            >
-              Testimonials
-            </Button>
-            <Button
-                variant="text"
-                size="small"
-              sx={{
-                ...fontFamilyStyle,
-                color: '#374151',
-                textTransform: 'uppercase',
-                fontSize: '0.95rem',
-              }}
-            >
-              FAQ
-            </Button>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'center',
+              gap: 2,
+              flexWrap: 'wrap',
+            }}
+          >
+            {navItems.map((item) =>
+              item.path ? (
+                <Button
+                  key={item.label}
+                  component={Link}
+                  to={item.path}
+                  variant="text"
+                  size="small"
+                  sx={navButtonStyle}
+                >
+                  {item.label}
+                </Button>
+              ) : (
+                <Button
+                  key={item.label}
+                  variant="text"
+                  size="small"
+                  sx={navButtonStyle}
+                >
+                  {item.label}
+                </Button>
+              )
+            )}
           </Box>
 
-          {/* Social Media Icons - Desktop */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
-            <SocialLink href="https://www.instagram.com/37jiujitsu" target="_blank" rel="noopener">
-              <SocialButton size="medium" aria-label="Follow us on Instagram">
+          {/* Desktop Social Media Icons */}
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              gap: 1,
+              alignItems: 'center',
+            }}
+          >
+            <SocialLink
+              href="https://www.instagram.com/37jiujitsu"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialButton
+                size="medium"
+                aria-label="Follow us on Instagram"
+              >
                 <InstagramIcon fontSize="medium" />
               </SocialButton>
             </SocialLink>
-            <SocialLink href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/" target="_blank" rel="noopener">
-              <SocialButton size="medium" aria-label="Like us on Facebook">
+
+            <SocialLink
+              href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <SocialButton
+                size="medium"
+                aria-label="Like us on Facebook"
+              >
                 <FacebookRoundedIcon fontSize="medium" />
               </SocialButton>
             </SocialLink>
           </Box>
 
           {/* Mobile Menu Button */}
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
-              <MenuIcon sx={{ color: '#374151' }} />
+          <Box
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              ml: 'auto',
+              gap: 1,
+            }}
+          >
+            <IconButton
+              aria-label="Open navigation menu"
+              onClick={toggleDrawer(true)}
+              sx={{
+                color: '#374151',
+                transition: 'color 0.2s ease',
+                '&:hover': {
+                  color: '#ff4694',
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              <MenuIcon />
             </IconButton>
+
             <Drawer
               anchor="top"
               open={open}
@@ -203,27 +216,82 @@ export default function Header() {
               }}
             >
               <Box sx={{ p: 2, backgroundColor: '#ffffff' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <IconButton onClick={toggleDrawer(false)}>
-                    <CloseRoundedIcon sx={{ color: '#374151' }} />
+                {/* Close Button */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <IconButton
+                    aria-label="Close navigation menu"
+                    onClick={closeDrawer}
+                    sx={{
+                      color: '#374151',
+                      '&:hover': {
+                        color: '#ff4694',
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <CloseRoundedIcon />
                   </IconButton>
                 </Box>
 
-                <MenuItem sx={{ ...fontFamilyStyle, '&:hover': { backgroundColor: '#f3f4f6' }, textTransform: 'uppercase', fontSize: '0.95rem' }}>About</MenuItem>
-                <MenuItem sx={{ ...fontFamilyStyle, '&:hover': { backgroundColor: '#f3f4f6' }, textTransform: 'uppercase', fontSize: '0.95rem' }}>Services</MenuItem>
-                <MenuItem sx={{ ...fontFamilyStyle, '&:hover': { backgroundColor: '#f3f4f6' }, textTransform: 'uppercase', fontSize: '0.95rem' }}>Contact</MenuItem>
-                <MenuItem sx={{ ...fontFamilyStyle, '&:hover': { backgroundColor: '#f3f4f6' }, textTransform: 'uppercase', fontSize: '0.95rem' }}>Beginners Course</MenuItem>
-                <MenuItem sx={{ ...fontFamilyStyle, '&:hover': { backgroundColor: '#f3f4f6' }, textTransform: 'uppercase', fontSize: '0.95rem' }}>Testimonials</MenuItem>
+                {/* Mobile Navigation */}
+                {navItems.map((item) =>
+                  item.path ? (
+                    <MenuItem
+                      key={item.label}
+                      component={Link}
+                      to={item.path}
+                      onClick={closeDrawer}
+                      sx={mobileMenuItemStyle}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      key={item.label}
+                      onClick={closeDrawer}
+                      sx={mobileMenuItemStyle}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  )
+                )}
 
-                {/* Social Media Icons - Mobile */}
-                <Box sx={{ display: 'flex', gap: 1, mt: 2, justifyContent: 'center' }}>
-                  <SocialLink href="https://www.instagram.com/37jiujitsu" target="_blank" rel="noopener">
-                    <SocialButton size="large" aria-label="Follow us on Instagram">
+                {/* Mobile Social Media Icons */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    mt: 2,
+                    justifyContent: 'center',
+                  }}
+                >
+                  <SocialLink
+                    href="https://www.instagram.com/37jiujitsu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialButton
+                      size="large"
+                      aria-label="Follow us on Instagram"
+                    >
                       <InstagramIcon fontSize="large" />
                     </SocialButton>
                   </SocialLink>
-                  <SocialLink href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/" target="_blank" rel="noopener">
-                    <SocialButton size="large" aria-label="Like us on Facebook">
+
+                  <SocialLink
+                    href="https://www.facebook.com/p/37-JiuJitsu-100076225269243/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SocialButton
+                      size="large"
+                      aria-label="Like us on Facebook"
+                    >
                       <FacebookRoundedIcon fontSize="large" />
                     </SocialButton>
                   </SocialLink>
