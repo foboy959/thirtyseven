@@ -10,7 +10,7 @@ import Contact from './subpages/Contact';
 
 function App() {
   return (
-    <Router basename="/thirtyseven">
+    <Router basename={import.meta.env.BASE_URL}>
       <Routes>
         {/* Home */}
         <Route
